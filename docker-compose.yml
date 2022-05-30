@@ -1,4 +1,6 @@
 version: "3.9"
+volumes:
+  pma-session-store:
 services:
   composer:
     image: composer:2.0
@@ -13,3 +15,20 @@ services:
       - ./backend:/work/backend
     working_dir: /work/backend
     command: php artisan serve --host=0.0.0.0
+  db:
+    image: mysql:8.0.29
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: common
+      MYSQL_USER: phper
+      MYSQL_PASSWORD: secret
+  pma:
+    image: phpmyadmin/phpmyadmin:5.2.0
+    environment:
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=secret
+    ports:
+      - 8080:80
+    volumes:
+      - pma-session-store:/sessions

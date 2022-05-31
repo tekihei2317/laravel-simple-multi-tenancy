@@ -64,7 +64,7 @@ return [
         ],
 
         'common' => array_merge($mysqlConnection, ['database' => env('DB_DATABASE', 'common')]),
-        'tenant' => array_merge($mysqlConnection, ['database' => 'tenant_0001']),
+        'tenant' => array_merge($mysqlConnection, ['database' => env('DB_TENANT_DATABASE', 'common')]),
 
         'pgsql' => [
             'driver' => 'pgsql',

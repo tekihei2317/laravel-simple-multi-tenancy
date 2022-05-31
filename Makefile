@@ -1,7 +1,7 @@
 create-project:
 	docker compose run composer create-project --prefer-dist laravel/laravel .
 up:
-	docker compose up -d app
+	docker compose up -d
 ps:
 	docker compose ps
 down:

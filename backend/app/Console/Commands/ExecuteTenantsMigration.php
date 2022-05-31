@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Config;
 
 class ExecuteTenantsMigration extends Command
 {
@@ -11,14 +12,14 @@ class ExecuteTenantsMigration extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'tenants:migrate';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'すべてのテナントスキーマのマイグレーションを実行する';
 
     /**
      * Execute the console command.
@@ -27,6 +28,19 @@ class ExecuteTenantsMigration extends Command
      */
     public function handle()
     {
+        $tenantSchemas = ['tenant_0001', 'tenant_0002']; // データベースから取得する
+
+        foreach ($tenantSchemas as $tenantSchema) {
+            $this->info("{$tenantSchema}のマイグレーションを実行します");
+
+            Config::set('database.connections.tenant.database', $tenantSchema);
+
+            $exitCode = $this->call('migrate', ['--database' => 'tenant']);
+            if ($exitCode !== 0) {
+                return 1;
+            }
+        }
+
         return 0;
     }
 }
